@@ -21547,7 +21547,7 @@
 	    value: function componentDidMount() {
 	      var _this3 = this;
 
-	      $.post('/select', function (rows) {
+	      socket.on('SERVER_SEND_LIST', function (rows) {
 	        _this3.state.mang = rows;
 	        _this3.setState(_this3.state);
 	      });
