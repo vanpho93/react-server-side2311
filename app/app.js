@@ -1,7 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var Box = require('./Components/Box.js');
+var List = require('./Components/List.js');
 ReactDOM.render(
-  <Box/>,
+  <List/>,
   document.getElementById('root')
 );
