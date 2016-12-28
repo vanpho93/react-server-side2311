@@ -48,7 +48,7 @@
 
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(32);
-	var List = __webpack_require__(180);
+	var List = __webpack_require__(178);
 	ReactDOM.render(React.createElement(List, null), document.getElementById('root'));
 
 /***/ },
@@ -21465,7 +21465,101 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 178 */,
+/* 178 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Note = __webpack_require__(179);
+
+	var _Note2 = _interopRequireDefault(_Note);
+
+	var _NoteForm = __webpack_require__(180);
+
+	var _NoteForm2 = _interopRequireDefault(_NoteForm);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var List = function (_React$Component) {
+	  _inherits(List, _React$Component);
+
+	  _createClass(List, [{
+	    key: 'update',
+	    value: function update(index, obj) {
+	      this.state.mang[index] = obj;
+	      this.setState(this.state);
+	    }
+	  }, {
+	    key: 'remove',
+	    value: function remove(index) {
+	      this.state.mang.splice(index, 1);
+	      this.setState(this.state);
+	    }
+	  }, {
+	    key: 'add',
+	    value: function add(obj) {
+	      this.state.mang.push(obj);
+	      this.setState(this.state);
+	    }
+	  }]);
+
+	  function List(props) {
+	    _classCallCheck(this, List);
+
+	    var _this = _possibleConstructorReturn(this, (List.__proto__ || Object.getPrototypeOf(List)).call(this, props));
+
+	    _this.state = {
+	      mang: []
+	    };
+	    return _this;
+	  }
+
+	  _createClass(List, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(_NoteForm2.default, { handleAdd: this.add.bind(this) }),
+	        this.state.mang.map(function (e, i) {
+	          return _react2.default.createElement(_Note2.default, { key: i, index: i,
+	            handleRemove: _this2.remove.bind(_this2),
+	            handleSave: _this2.update.bind(_this2), info: e });
+	        })
+	      );
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this3 = this;
+
+	      $.post('/select', function (rows) {
+	        _this3.state.mang = rows;
+	        _this3.setState(_this3.state);
+	      });
+	    }
+	  }]);
+
+	  return List;
+	}(_react2.default.Component);
+
+	module.exports = List;
+
+/***/ },
 /* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -21485,37 +21579,120 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Note = function (_Component) {
-	  _inherits(Note, _Component);
+	var Note = function (_React$Component) {
+	  _inherits(Note, _React$Component);
 
-	  function Note() {
+	  function Note(props) {
 	    _classCallCheck(this, Note);
 
-	    return _possibleConstructorReturn(this, (Note.__proto__ || Object.getPrototypeOf(Note)).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, (Note.__proto__ || Object.getPrototypeOf(Note)).call(this, props));
+
+	    _this.state = { isUpdating: false };
+	    return _this;
 	  }
 
 	  _createClass(Note, [{
+	    key: 'save',
+	    value: function save() {
+	      var _props = this.props,
+	          handleSave = _props.handleSave,
+	          index = _props.index;
+	      //handleSave(index, this.refs.txt.value);
+
+	      var content = this.refs.note.value;
+	      var sub = this.refs.sub.value;
+	      var id = this.props.info.id;
+	      $.post('/update', { id: id, content: content, sub: sub }, function (data) {
+	        //Xu ly loi neu co
+	        console.log(data);
+	        handleSave(index, data);
+	      });
+	      this.setState({ isUpdating: false });
+	    }
+	  }, {
+	    key: 'cancel',
+	    value: function cancel() {
+	      this.setState({ isUpdating: false });
+	    }
+	  }, {
+	    key: 'update',
+	    value: function update() {
+	      this.setState({ isUpdating: true });
+	    }
+	  }, {
+	    key: 'remove',
+	    value: function remove() {
+	      var _props2 = this.props,
+	          handleRemove = _props2.handleRemove,
+	          index = _props2.index;
+	      var id = this.props.info.id;
+
+	      $.post('/remove', { id: id }, function (data) {
+	        if (data == 'Thanh cong') {
+	          handleRemove(index);
+	        } else {
+	          alert('Loi: ' + data);
+	        }
+	      });
+	      //handleRemove(index);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return _react2.default.createElement(
+	      var xhtml = this.state.isUpdating ? _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(
-	          'p',
+	          'h1',
 	          null,
-	          this.props.children
+	          this.props.info.subject
+	        ),
+	        _react2.default.createElement('input', { type: 'text', defaultValue: this.props.info.subject, ref: 'sub' }),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement('input', { type: 'text', defaultValue: this.props.info.content, ref: 'note' }),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this.save.bind(this) },
+	          'Luu'
 	        ),
 	        _react2.default.createElement(
 	          'button',
+	          { onClick: this.cancel.bind(this) },
+	          'Huy'
+	        )
+	      ) : _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h1',
 	          null,
+	          this.props.info.subject
+	        ),
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          this.props.info.content
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this.remove.bind(this) },
 	          'Xoa'
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this.update.bind(this) },
+	          'Sua'
 	        )
 	      );
+	      return xhtml;
 	    }
 	  }]);
 
 	  return Note;
-	}(_react.Component);
+	}(_react2.default.Component);
 
 	module.exports = Note;
 
@@ -21531,10 +21708,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Note = __webpack_require__(179);
-
-	var _Note2 = _interopRequireDefault(_Note);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21543,39 +21716,68 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var List = function (_Component) {
-	  _inherits(List, _Component);
+	var NoteForm = function (_React$Component) {
+	  _inherits(NoteForm, _React$Component);
 
-	  function List(props) {
-	    _classCallCheck(this, List);
+	  function NoteForm(props) {
+	    _classCallCheck(this, NoteForm);
 
-	    var _this = _possibleConstructorReturn(this, (List.__proto__ || Object.getPrototypeOf(List)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (NoteForm.__proto__ || Object.getPrototypeOf(NoteForm)).call(this, props));
 
-	    _this.state = { mang: ['Android', 'iOS', 'NodeJS'] };
+	    _this.state = { isAdding: false };
 	    return _this;
 	  }
 
-	  _createClass(List, [{
+	  _createClass(NoteForm, [{
+	    key: 'show',
+	    value: function show() {
+	      this.setState({ isAdding: true });
+	    }
+	  }, {
+	    key: 'add',
+	    value: function add() {
+	      var _this2 = this;
+
+	      // var {handleAdd} = this.props;
+	      // handleAdd(this.refs.txt.value);
+	      // this.refs.txt.value = '';
+	      var sub = this.refs.sub.value;
+	      var note = this.refs.note.value;
+	      $.post('/insert', { sub: sub, note: note }, function (data) {
+	        _this2.props.handleAdd(data);
+	      });
+	      this.setState({ isAdding: false });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return _react2.default.createElement(
+	      var xhtml = this.state.isAdding ? _react2.default.createElement(
 	        'div',
 	        null,
-	        this.state.mang.map(function (e, i) {
-	          return _react2.default.createElement(
-	            _Note2.default,
-	            { key: i },
-	            e
-	          );
-	        })
+	        _react2.default.createElement('input', { type: 'text', ref: 'sub', placeholder: 'Enter your subject' }),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement('input', { type: 'text', ref: 'note', placeholder: 'Enter your note' }),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this.add.bind(this) },
+	          'Add'
+	        )
+	      ) : _react2.default.createElement(
+	        'button',
+	        { onClick: this.show.bind(this) },
+	        'Show'
 	      );
+	      return xhtml;
 	    }
 	  }]);
 
-	  return List;
-	}(_react.Component);
+	  return NoteForm;
+	}(_react2.default.Component);
 
-	module.exports = List;
+	module.exports = NoteForm;
 
 /***/ }
 /******/ ]);
