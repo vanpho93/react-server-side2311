@@ -1,7 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-
+var Box = require('./Components/Box.js');
 ReactDOM.render(
-  <a href="http://khoapham.vn">Khoa Pham NodeJS</a>,
+  <Box/>,
   document.getElementById('root')
 );
