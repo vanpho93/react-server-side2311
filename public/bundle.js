@@ -44,14 +44,16 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(32);
 
-	ReactDOM.render(
-	  React.createElement('a', {href: 'http://khoapham.vn'}, 'Khoa Pham Nodejs'),
-	  document.getElementById('root')
-	);
-
+	ReactDOM.render(React.createElement(
+	  'a',
+	  { href: 'http://khoapham.vn' },
+	  'Khoa Pham NodeJS'
+	), document.getElementById('root'));
 
 /***/ },
 /* 1 */
