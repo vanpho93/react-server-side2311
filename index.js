@@ -10,6 +10,12 @@ app.set('views', './views');
 app.use(express.static('public'));
 server.listen(process.env.PORT || 3000,() => console.log('Server started'));
 
+app.get('/test', function(req, res){
+  selectNote((err, result) => {
+    res.send(result.rows);
+  });
+});
+
 app.get('/', require('./controler/indexRoute.js'));
 app.post('/insert', parser, require('./controler/insert.js'));
 app.post('/update', parser, require('./controler/update.js'));
