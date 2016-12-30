@@ -21503,6 +21503,7 @@
 	    _this.state = {
 	      mang: []
 	    };
+	    socket = io();
 	    return _this;
 	  }
 
@@ -21523,7 +21524,7 @@
 	    value: function componentDidMount() {
 	      var _this2 = this;
 
-	      socket.emit('PLEASE_SEND_LIST', ' ');
+	      //socket.emit('PLEASE_SEND_LIST', ' ');
 	      socket.on('SERVER_SEND_LIST', function (rows) {
 	        _this2.state.mang = rows;
 	        _this2.setState(_this2.state);
