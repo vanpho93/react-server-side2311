@@ -21498,8 +21498,6 @@
 	  function List(props) {
 	    _classCallCheck(this, List);
 
-	    socket = io();
-
 	    var _this = _possibleConstructorReturn(this, (List.__proto__ || Object.getPrototypeOf(List)).call(this, props));
 
 	    _this.state = {
@@ -21528,6 +21526,7 @@
 	    value: function componentDidMount() {
 	      var _this3 = this;
 
+	      socket.emit('PLEASE_SEND_LIST', '');
 	      socket.on('SERVER_SEND_LIST', function (rows) {
 	        _this3.state.mang = rows;
 	        _this3.setState(_this3.state);

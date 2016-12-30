@@ -24,9 +24,11 @@ app.post('/remove', parser, require('./controler/remove.js'));
 
 io.on('connection', socket => {
   console.log('Co nguoi ket noi');
-  selectNote((err, result) => {
-    socket.emit('SERVER_SEND_LIST', result.rows)
-  });
+  socket.on("PLEASE_SEND_LIST", data => {
+    selectNote((err, result) => {
+      socket.emit('SERVER_SEND_LIST', result.rows)
+    });
+  })
 
   socket.on('CLIENT_ADD_NOTE', data => {
     var {sub, note} = data;

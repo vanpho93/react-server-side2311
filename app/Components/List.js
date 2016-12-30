@@ -4,7 +4,6 @@ import NoteForm from './NoteForm.js';
 
 class List extends React.Component{
   constructor(props){
-    socket = io();
     super(props);
     this.state = {
       mang: []
@@ -20,6 +19,7 @@ class List extends React.Component{
     );
   }
   componentDidMount(){
+    socket.emit('PLEASE_SEND_LIST', '');
     socket.on('SERVER_SEND_LIST', rows => {
       this.state.mang = rows;
       this.setState(this.state);
