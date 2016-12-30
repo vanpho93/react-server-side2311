@@ -21509,45 +21509,42 @@
 	  _createClass(List, [{
 	    key: 'render',
 	    value: function render() {
-	      var _this2 = this;
-
 	      return _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(_NoteForm2.default, null),
 	        this.state.mang.map(function (e, i) {
-	          return _react2.default.createElement(_Note2.default, { key: i, index: i,
-	            handleSave: _this2.update.bind(_this2), info: e });
+	          return _react2.default.createElement(_Note2.default, { key: i, index: i, info: e });
 	        })
 	      );
 	    }
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var _this3 = this;
+	      var _this2 = this;
 
 	      socket.emit('PLEASE_SEND_LIST', ' ');
 	      socket.on('SERVER_SEND_LIST', function (rows) {
-	        _this3.state.mang = rows;
-	        _this3.setState(_this3.state);
+	        _this2.state.mang = rows;
+	        _this2.setState(_this2.state);
 	      });
 	      socket.on('SERVER_CONFIRM_ADD', function (row) {
-	        _this3.state.mang.push(row);
-	        _this3.setState(_this3.state);
+	        _this2.state.mang.push(row);
+	        _this2.setState(_this2.state);
 	      });
 	      socket.on('SERVER_CONFIRM_REMOVE', function (id) {
-	        _this3.state.mang = _this3.state.mang.filter(function (e) {
+	        _this2.state.mang = _this2.state.mang.filter(function (e) {
 	          return e.id != id;
 	        });
-	        _this3.setState(_this3.state);
+	        _this2.setState(_this2.state);
 	      });
 	      socket.on('SERVER_CONFIRM_UPDATE', function (info) {
-	        var index = _this3.state.mang.findIndex(function (e) {
+	        var index = _this2.state.mang.findIndex(function (e) {
 	          return e.id == info.id;
 	        });
-	        _this3.state.mang[index].content = info.note;
-	        _this3.state.mang[index].subject = info.sub;
-	        _this3.setState(_this3.state);
+	        _this2.state.mang[index].content = info.note;
+	        _this2.state.mang[index].subject = info.sub;
+	        _this2.setState(_this2.state);
 	      });
 	    }
 	  }]);

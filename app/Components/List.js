@@ -13,8 +13,7 @@ class List extends React.Component{
     return (
       <div>
         <NoteForm/>
-        {this.state.mang.map((e, i) => <Note key={i} index={i}
-        handleSave={this.update.bind(this)} info={e}/>)}
+        {this.state.mang.map((e, i) => <Note key={i} index={i} info={e}/>)}
       </div>
     );
   }
