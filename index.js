@@ -8,7 +8,7 @@ var {selectNote, insertNote, removeNote, updateNote} = require('./db.js');
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
-server.listen(3000,() => console.log('Server started'));
+server.listen(process.env.PORT || 3000,() => console.log('Server started'));
 
 app.get('/', require('./controler/indexRoute.js'));
 app.post('/insert', parser, require('./controler/insert.js'));

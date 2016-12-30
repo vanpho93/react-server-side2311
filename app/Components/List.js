@@ -3,10 +3,6 @@ import Note from './Note.js'
 import NoteForm from './NoteForm.js';
 
 class List extends React.Component{
-  update(index, obj){
-    this.state.mang[index] = obj;
-    this.setState(this.state);
-  }
   constructor(props){
     super(props);
     this.state = {

@@ -1,8 +1,18 @@
 var pg = require('pg');
-var URI = `postgres://hgupiezguzpovh:fd330a613a424f531d6dd0cdd08083649029724e28406d906b9f05f0f904ebe9@ec2-54-163-234-4.compute-1.amazonaws.com:5432/d4e7j43jj6v6se`
+var config = {
+  user: 'postgres',
+  password: 'khoapham',
+  host: 'localhost',
+  port: 5432,
+  database: 'EmployeeDB',
+  idleTimeoutMillis: 3000,
+  max: 100
+}
+var connectString = `postgres://${config.user}:${config.password}@${config.host}:${config.port}/${config.database}`
+var pool = new pg.Pool(config);
 
 function query(sql, cb){
-  pg.connect(URI, (err, client, done) => {
+  pg.connect(connectString, (err, client, done) => {
     if(err) return cb(err);
     done();
     client.query(sql, (err, result) => {

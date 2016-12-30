@@ -21495,14 +21495,6 @@
 	var List = function (_React$Component) {
 	  _inherits(List, _React$Component);
 
-	  _createClass(List, [{
-	    key: 'update',
-	    value: function update(index, obj) {
-	      this.state.mang[index] = obj;
-	      this.setState(this.state);
-	    }
-	  }]);
-
 	  function List(props) {
 	    _classCallCheck(this, List);
 
