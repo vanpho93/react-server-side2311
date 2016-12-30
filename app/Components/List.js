@@ -4,6 +4,7 @@ import NoteForm from './NoteForm.js';
 
 class List extends React.Component{
   constructor(props){
+    socket = io();
     super(props);
     this.state = {
       mang: []

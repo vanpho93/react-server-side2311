@@ -21498,6 +21498,8 @@
 	  function List(props) {
 	    _classCallCheck(this, List);
 
+	    socket = io();
+
 	    var _this = _possibleConstructorReturn(this, (List.__proto__ || Object.getPrototypeOf(List)).call(this, props));
 
 	    _this.state = {
