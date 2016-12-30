@@ -8,10 +8,11 @@ var config = {
   idleTimeoutMillis: 3000,
   max: 100
 }
+var connectString = `postgres://${config.user}:${config.password}@${config.host}:${config.port}/${config.database}`
 var pool = new pg.Pool(config);
 
 function query(sql, cb){
-  pool.connect((err, client, done) => {
+  pg.connect(connectString, (err, client, done) => {
     if(err) return cb(err);
     done();
     client.query(sql, (err, result) => {

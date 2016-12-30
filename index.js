@@ -3,7 +3,8 @@ var parser = require('body-parser').urlencoded({extended: false});
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-var {selectNote, insertNote} = require('./db.js');
+var {selectNote, insertNote, removeNote, updateNote} = require('./db.js');
+
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
@@ -20,11 +21,27 @@ io.on('connection', socket => {
   selectNote((err, result) => {
     socket.emit('SERVER_SEND_LIST', result.rows)
   });
+
   socket.on('CLIENT_ADD_NOTE', data => {
     var {sub, note} = data;
     insertNote(sub, note, (err, result) => {
       if(err) return console.log(err + '');
       socket.emit('SERVER_CONFIRM_ADD', result.rows[0]);
     });
+  });
+
+  socket.on('CLIENT_REMOVE_NOTE', id => {
+    removeNote(id, (err, result) => {
+      if(err) return console.log(err + '');
+      socket.emit('SERVER_CONFIRM_REMOVE', id);
+    });
+  });
+
+  socket.on('CLIENT_UPDATE_NOTE', info => {
+    var {id, note, sub} = info;
+    updateNote(sub, note, id, (err, result) => {
+      if(err) return console.log(err + '');
+      socket.emit('SERVER_CONFIRM_UPDATE', info);
+    })
   });
 });

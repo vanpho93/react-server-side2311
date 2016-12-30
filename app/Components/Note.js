@@ -6,16 +6,11 @@ class Note extends React.Component{
     this.state = {isUpdating: false}
   }
   save(){
-    var {handleSave, index} = this.props;
     //handleSave(index, this.refs.txt.value);
-    var content = this.refs.note.value;
+    var note = this.refs.note.value;
     var sub = this.refs.sub.value;
     var id = this.props.info.id;
-    $.post('/update', {id, content, sub}, data => {
-      //Xu ly loi neu co
-      console.log(data);
-      handleSave(index, data);
-    });
+    socket.emit('CLIENT_UPDATE_NOTE', {note, sub, id});
     this.setState({isUpdating: false});
   }
   cancel(){
@@ -25,16 +20,8 @@ class Note extends React.Component{
     this.setState({isUpdating: true});
   }
   remove(){
-    var {handleRemove, index} = this.props;
     var {id} = this.props.info;
-    $.post('/remove', {id}, data => {
-      if(data == 'Thanh cong'){
-        handleRemove(index);
-      }else{
-        alert('Loi: ' + data)
-      }
-    });
-    //handleRemove(index);
+    socket.emit('CLIENT_REMOVE_NOTE', id);
   }
   render(){
     var xhtml = this.state.isUpdating?

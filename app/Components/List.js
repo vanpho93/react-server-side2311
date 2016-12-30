@@ -7,14 +7,6 @@ class List extends React.Component{
     this.state.mang[index] = obj;
     this.setState(this.state);
   }
-  remove(index){
-    this.state.mang.splice(index, 1);
-    this.setState(this.state);
-  }
-  add(obj){
-    this.state.mang.push(obj);
-    this.setState(this.state);
-  }
   constructor(props){
     super(props);
     this.state = {
@@ -24,9 +16,8 @@ class List extends React.Component{
   render(){
     return (
       <div>
-        <NoteForm handleAdd={this.add.bind(this)}/>
+        <NoteForm/>
         {this.state.mang.map((e, i) => <Note key={i} index={i}
-        handleRemove={this.remove.bind(this)}
         handleSave={this.update.bind(this)} info={e}/>)}
       </div>
     );
@@ -38,6 +29,16 @@ class List extends React.Component{
     });
     socket.on('SERVER_CONFIRM_ADD', row => {
       this.state.mang.push(row);
+      this.setState(this.state);
+    });
+    socket.on('SERVER_CONFIRM_REMOVE', id => {
+      this.state.mang = this.state.mang.filter(e => e.id != id);
+      this.setState(this.state);
+    });
+    socket.on('SERVER_CONFIRM_UPDATE', info => {
+      var index = this.state.mang.findIndex(e => e.id == info.id);
+      this.state.mang[index].content = info.note;
+      this.state.mang[index].subject = info.sub;
       this.setState(this.state);
     });
   }

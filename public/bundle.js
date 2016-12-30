@@ -21501,18 +21501,6 @@
 	      this.state.mang[index] = obj;
 	      this.setState(this.state);
 	    }
-	  }, {
-	    key: 'remove',
-	    value: function remove(index) {
-	      this.state.mang.splice(index, 1);
-	      this.setState(this.state);
-	    }
-	  }, {
-	    key: 'add',
-	    value: function add(obj) {
-	      this.state.mang.push(obj);
-	      this.setState(this.state);
-	    }
 	  }]);
 
 	  function List(props) {
@@ -21534,10 +21522,9 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_NoteForm2.default, { handleAdd: this.add.bind(this) }),
+	        _react2.default.createElement(_NoteForm2.default, null),
 	        this.state.mang.map(function (e, i) {
 	          return _react2.default.createElement(_Note2.default, { key: i, index: i,
-	            handleRemove: _this2.remove.bind(_this2),
 	            handleSave: _this2.update.bind(_this2), info: e });
 	        })
 	      );
@@ -21553,6 +21540,20 @@
 	      });
 	      socket.on('SERVER_CONFIRM_ADD', function (row) {
 	        _this3.state.mang.push(row);
+	        _this3.setState(_this3.state);
+	      });
+	      socket.on('SERVER_CONFIRM_REMOVE', function (id) {
+	        _this3.state.mang = _this3.state.mang.filter(function (e) {
+	          return e.id != id;
+	        });
+	        _this3.setState(_this3.state);
+	      });
+	      socket.on('SERVER_CONFIRM_UPDATE', function (info) {
+	        var index = _this3.state.mang.findIndex(function (e) {
+	          return e.id == info.id;
+	        });
+	        _this3.state.mang[index].content = info.note;
+	        _this3.state.mang[index].subject = info.sub;
 	        _this3.setState(_this3.state);
 	      });
 	    }
@@ -21598,19 +21599,11 @@
 	  _createClass(Note, [{
 	    key: 'save',
 	    value: function save() {
-	      var _props = this.props,
-	          handleSave = _props.handleSave,
-	          index = _props.index;
 	      //handleSave(index, this.refs.txt.value);
-
-	      var content = this.refs.note.value;
+	      var note = this.refs.note.value;
 	      var sub = this.refs.sub.value;
 	      var id = this.props.info.id;
-	      $.post('/update', { id: id, content: content, sub: sub }, function (data) {
-	        //Xu ly loi neu co
-	        console.log(data);
-	        handleSave(index, data);
-	      });
+	      socket.emit('CLIENT_UPDATE_NOTE', { note: note, sub: sub, id: id });
 	      this.setState({ isUpdating: false });
 	    }
 	  }, {
@@ -21626,19 +21619,9 @@
 	  }, {
 	    key: 'remove',
 	    value: function remove() {
-	      var _props2 = this.props,
-	          handleRemove = _props2.handleRemove,
-	          index = _props2.index;
 	      var id = this.props.info.id;
 
-	      $.post('/remove', { id: id }, function (data) {
-	        if (data == 'Thanh cong') {
-	          handleRemove(index);
-	        } else {
-	          alert('Loi: ' + data);
-	        }
-	      });
-	      //handleRemove(index);
+	      socket.emit('CLIENT_REMOVE_NOTE', id);
 	    }
 	  }, {
 	    key: 'render',
