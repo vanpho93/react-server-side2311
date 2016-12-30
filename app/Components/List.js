@@ -19,7 +19,7 @@ class List extends React.Component{
     );
   }
   componentDidMount(){
-    socket.emit('PLEASE_SEND_LIST', '');
+    socket.emit('PLEASE_SEND_LIST', ' ');
     socket.on('SERVER_SEND_LIST', rows => {
       this.state.mang = rows;
       this.setState(this.state);
