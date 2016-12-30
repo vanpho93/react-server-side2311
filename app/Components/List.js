@@ -36,6 +36,10 @@ class List extends React.Component{
       this.state.mang = rows;
       this.setState(this.state);
     });
+    socket.on('SERVER_CONFIRM_ADD', row => {
+      this.state.mang.push(row);
+      this.setState(this.state);
+    });
   }
 }
 

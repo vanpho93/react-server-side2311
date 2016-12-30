@@ -21551,6 +21551,10 @@
 	        _this3.state.mang = rows;
 	        _this3.setState(_this3.state);
 	      });
+	      socket.on('SERVER_CONFIRM_ADD', function (row) {
+	        _this3.state.mang.push(row);
+	        _this3.setState(_this3.state);
+	      });
 	    }
 	  }]);
 
@@ -21736,16 +21740,12 @@
 	  }, {
 	    key: 'add',
 	    value: function add() {
-	      var _this2 = this;
-
 	      // var {handleAdd} = this.props;
 	      // handleAdd(this.refs.txt.value);
 	      // this.refs.txt.value = '';
 	      var sub = this.refs.sub.value;
 	      var note = this.refs.note.value;
-	      $.post('/insert', { sub: sub, note: note }, function (data) {
-	        _this2.props.handleAdd(data);
-	      });
+	      socket.emit('CLIENT_ADD_NOTE', { sub: sub, note: note });
 	      this.setState({ isAdding: false });
 	    }
 	  }, {

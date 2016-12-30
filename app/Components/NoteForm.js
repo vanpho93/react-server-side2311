@@ -14,9 +14,7 @@ class NoteForm extends React.Component{
     // this.refs.txt.value = '';
     var sub = this.refs.sub.value;
     var note = this.refs.note.value;
-    $.post('/insert', {sub, note}, data => {
-      this.props.handleAdd(data);
-    });
+    socket.emit('CLIENT_ADD_NOTE', {sub, note});
     this.setState({isAdding: false})
   }
   render(){

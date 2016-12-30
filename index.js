@@ -3,7 +3,7 @@ var parser = require('body-parser').urlencoded({extended: false});
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-var {selectNote} = require('./db.js');
+var {selectNote, insertNote} = require('./db.js');
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
@@ -19,5 +19,12 @@ io.on('connection', socket => {
   console.log('Co nguoi ket noi');
   selectNote((err, result) => {
     socket.emit('SERVER_SEND_LIST', result.rows)
+  });
+  socket.on('CLIENT_ADD_NOTE', data => {
+    var {sub, note} = data;
+    insertNote(sub, note, (err, result) => {
+      if(err) return console.log(err + '');
+      socket.emit('SERVER_CONFIRM_ADD', result.rows[0]);
+    });
   });
 });
